@@ -1,11 +1,11 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.Reflection;
+﻿using System.Reflection;
 using File = Day7.Models.File;
 
 var path = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), @"Input.txt");
 var lines = System.IO.File.ReadAllLines(path);
 
 var move = "$ cd";
+var moveBack = move + " ..";
 var dir = "dir";
 var ls = "$ ls";
 
@@ -31,11 +31,11 @@ for (int i = 1; i < lines.Length; i++)
         var name = line.Substring(line.IndexOf(" ") + 1);
         currentDirectory.AddFile(new File { Name = name, IsDirectory = true, ParentDirectory = currentDirectory });
     } 
-    else if(line.Equals("$ cd .."))
+    else if(line.Equals(moveBack))
     {
         currentDirectory = currentDirectory.ParentDirectory;
     }
-    else if(line.StartsWith("$ cd"))
+    else if(line.StartsWith(move))
     {
         var name = line.Substring(line.LastIndexOf(" ") + 1);
         currentDirectory = currentDirectory.Children.First(x => x.Name == name);
